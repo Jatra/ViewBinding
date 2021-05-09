@@ -13,29 +13,22 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainFragment : BaseFragment<MainFragmentBinding>() {
 
-    @Inject
-    lateinit var counter: Counter
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MainFragmentBinding
+        get() = MainFragmentBinding::inflate
+
     val viewModel by viewModels<MainViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        val root = super.onCreateView(inflater, container, savedInstanceState)
-        setObservers()
-        binding.button.setOnClickListener { viewModel.click() }
-        return root
+    override fun setObservers() {
+        viewModel.liveData.observe(viewLifecycleOwner, Observer<Int> { update(it)} )
     }
 
-    private fun setObservers() {
-        viewModel.liveData.observe(viewLifecycleOwner, Observer<Int> { update(it)} )
+    override fun setListeners() {
+        binding.button.setOnClickListener { viewModel.click() }
     }
 
     private fun update(count: Int) {
         binding.message.text = "Clicked $count times"
     }
-
-    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> MainFragmentBinding
-        get() = MainFragmentBinding::inflate
-
 
     companion object {
         fun newInstance() = MainFragment()

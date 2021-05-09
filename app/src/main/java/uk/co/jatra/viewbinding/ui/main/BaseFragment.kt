@@ -24,7 +24,15 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = bindingInflater.invoke(inflater, container, false)
+        setObservers()
+        setListeners()
         return binding.root
+    }
+
+    open fun setListeners() {
+    }
+
+    open fun setObservers() {
     }
 
 
