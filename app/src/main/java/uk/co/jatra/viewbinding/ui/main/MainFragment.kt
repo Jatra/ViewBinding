@@ -13,11 +13,17 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
         get() = MainFragmentBinding::inflate
 
     override fun setObservers() {
-        viewModel.liveData.observe(viewLifecycleOwner, Observer<Int> { update(it) })
+        with(viewModel) {
+            liveData.observe(viewLifecycleOwner, Observer<Int> { update(it) })
+            // and more reaction
+        }
     }
 
     override fun setListeners() {
-        binding.button.setOnClickListener { viewModel.click() }
+        with(binding) {
+            button.setOnClickListener { viewModel.click() }
+            //and any other input handling
+        }
     }
 
     private fun update(count: Int) {
